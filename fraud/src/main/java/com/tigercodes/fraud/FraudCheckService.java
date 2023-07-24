@@ -15,7 +15,7 @@ public class FraudCheckService {
         fraudCheckHistoryRepository.save(
                 FraudCheckHistory
                         .builder()
-                        .id(customerId)
+                        .customerId(customerId)
                         .isFraudster(false)                 // we can do some checks for this
                         .createdAt(LocalDateTime.now())
                         .build()
