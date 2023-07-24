@@ -1,13 +1,13 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   application:
-    name: customer
+    name: fraud
   datasource:
     username: "postgres"
     password: "postgres"
-    url: jdbc:postgresql://localhost:5432/customer_micro
+    url: jdbc:postgresql://localhost:5432/fraud_micro
   jpa:
     hibernate:
       ddl-auto: update
