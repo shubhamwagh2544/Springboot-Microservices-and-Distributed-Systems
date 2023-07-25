@@ -1,4 +1,4 @@
-package com.tigercodes.fraud;
+package com.tigercodes.clients.fraud;
 
 public record FraudCheckResponse(boolean isFraudster) {
 }
