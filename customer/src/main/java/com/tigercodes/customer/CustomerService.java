@@ -50,8 +50,9 @@ public class CustomerService {
                 new NotificationRequest(
                         customer.getId(),
                         customer.getEmail(),
-                        "Welcome to Tigercodes"
+                        String.format("Hello %s, Welcome to Tigercodes..", customer.getFirstName())
                 )
         );
+
     }
 }
