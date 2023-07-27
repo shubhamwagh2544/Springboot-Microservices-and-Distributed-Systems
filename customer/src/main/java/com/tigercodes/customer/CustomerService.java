@@ -1,5 +1,6 @@
 package com.tigercodes.customer;
 
+import com.tigercodes.amqp.RabbitMqMessageProducer;
 import com.tigercodes.clients.fraud.FraudCheckResponse;
 import com.tigercodes.clients.fraud.FraudClient;
 import com.tigercodes.clients.notification.NotificationClient;
@@ -16,6 +17,7 @@ public class CustomerService {
     private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
     private final NotificationClient notificationClient;
+    private final RabbitMqMessageProducer rabbitMqMessageProducer;
 
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder()
@@ -30,6 +32,7 @@ public class CustomerService {
         customerRepository.saveAndFlush(customer);
 
         //todo: check if customer is fraudster
+
         /*
             FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
                     "http://FRAUD/api/v1/fraud-check/{customerId}",
@@ -46,12 +49,18 @@ public class CustomerService {
 
         //todo: send notification
 
-        notificationClient.sendNotification(
-                new NotificationRequest(
-                        customer.getId(),
-                        customer.getEmail(),
-                        String.format("Hello %s, Welcome to Tigercodes..", customer.getFirstName())
-                )
+        NotificationRequest notificationRequest = new NotificationRequest(
+                customer.getId(),
+                customer.getEmail(),
+                String.format("Hello %s, Welcome to Tigercodes..", customer.getFirstName())
+        );
+
+        //notificationClient.sendNotification(notificationRequest);
+
+        rabbitMqMessageProducer.publish(
+                "internal.exchange",
+                "internal.notification.routing-key",
+                notificationRequest
         );
 
     }
